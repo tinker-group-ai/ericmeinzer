@@ -1,0 +1,401 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   DESIGN TOKENS
+   All values defined once here. Edit tokens, not components.
+   Color system uses HSLA — hue 0/360 (red) as the base.
+───────────────────────────────────────────────────────────── */
+:root {
+  /* Color — Primitives (HSLA)
+     Base hue: 360 (red)
+     Neutrals shift warm (hue ~15) to stay harmonious with the red bg
+  ────────────────────────────────────────────── */
+  --hue-red: 360;
+  --hue-warm: 15;
+
+  /* Reds — background range */
+  --color-red-950: hsla(var(--hue-red), 60%, 6%, 1); /* near black red */
+  --color-red-900: hsla(var(--hue-red), 60%, 10%, 1); /* deepest bg */
+  --color-red-800: hsla(var(--hue-red), 60%, 18%, 1); /* main bg */
+  --color-red-700: hsla(var(--hue-red), 55%, 24%, 1); /* surface / cards */
+  --color-red-600: hsla(var(--hue-red), 50%, 30%, 1); /* borders */
+  --color-red-400: hsla(var(--hue-red), 40%, 50%, 1); /* subtle text */
+
+  /* Warm neutrals — text range */
+  --color-warm-200: hsla(var(--hue-warm), 30%, 88%, 1); /* primary text */
+  --color-warm-300: hsla(var(--hue-warm), 25%, 76%, 1); /* muted text */
+  --color-warm-400: hsla(var(--hue-warm), 20%, 62%, 1); /* subtle text */
+
+  /* Tag / surface */
+  --color-tag-bg: hsla(var(--hue-red), 55%, 25%, 1);
+
+  /* Nav overlay */
+  --color-nav-bg: hsla(var(--hue-red), 60%, 10%, 0.9);
+
+  /* Color — Semantic
+  ────────────────────────────────────────────── */
+  --color-bg: var(--color-red-800);
+  --color-bg-footer: var(--color-red-900);
+  --color-bg-nav: var(--color-nav-bg);
+  --color-bg-tag: var(--color-tag-bg);
+  --color-text: var(--color-warm-200);
+  --color-text-muted: var(--color-warm-300);
+  --color-text-subtle: var(--color-warm-400);
+  --color-border: var(--color-red-600);
+  --color-accent: var(--color-warm-200);
+  --color-accent-hover: var(--color-warm-300);
+  --color-accent-vertical: var(--color-red-900);
+
+  /* Typography
+  ────────────────────────────────────────────── */
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-size-xs: 0.75rem; /*  12px */
+  --font-size-sm: 0.875rem; /*  14px */
+  --font-size-base: 1rem; /*  16px */
+  --font-size-lg: 1.125rem; /*  18px */
+  --font-size-xl: 1.25rem; /*  20px */
+  --font-size-2xl: 1.5rem; /*  24px */
+  --font-size-4xl: 2.25rem; /*  36px */
+  --font-size-5xl: 3rem; /*  48px */
+  --font-size-6xl: 3.75rem; /*  60px */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --leading-tight: 1.1;
+  --leading-normal: 1.625;
+  --tracking-tight: -0.025em;
+  --tracking-wide: 0.05em;
+
+  /* Spacing
+  ────────────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Layout
+  ────────────────────────────────────────────── */
+  --max-width-content: 64rem;
+  --max-width-prose: 42rem;
+  --container-px: var(--space-6);
+
+  /* Borders & Radius
+  ────────────────────────────────────────────── */
+  --border-width: 0.0625rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+
+  /* Motion
+  ────────────────────────────────────────────── */
+  --transition-fast: 0.15s ease;
+
+  /* Z-index
+  ────────────────────────────────────────────── */
+  --z-sticky: 50;
+
+  /* Effects
+  ────────────────────────────────────────────── */
+  --blur-nav: blur(0.25rem);
+  --border-accent-width: 0.25rem;
+  --shadow-card: 0 0.125rem 0.5rem hsla(var(--hue-red), 60%, 4%, 0.4);
+  --shadow-card-hover: 0 0.25rem 1rem hsla(var(--hue-red), 60%, 4%, 0.6);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   COMPONENTS
+───────────────────────────────────────────────────────────── */
+@layer components {
+  /* Base
+  ─────────────────────────────────────────────── */
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Layout
+  ─────────────────────────────────────────────── */
+  .container {
+    width: 100%;
+    max-width: var(--max-width-content);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--container-px);
+    padding-right: var(--container-px);
+  }
+
+  .container--narrow {
+    max-width: var(--max-width-prose);
+  }
+
+  /* Header & Nav
+  ─────────────────────────────────────────────── */
+  .site-header {
+    border-bottom: var(--border-width) solid var(--color-border);
+    position: sticky;
+    top: 0;
+    background: var(--color-bg-nav);
+    backdrop-filter: var(--blur-nav);
+    -webkit-backdrop-filter: var(--blur-nav);
+    z-index: var(--z-sticky);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-4);
+  }
+
+  .site-nav__logo {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .site-nav__links {
+    display: flex;
+    gap: var(--space-6);
+    font-size: var(--font-size-base);
+  }
+
+  .site-nav__links a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition-fast);
+  }
+
+  .site-nav__links a:hover {
+    color: var(--color-text-muted);
+  }
+
+  /* Sections
+  ─────────────────────────────────────────────── */
+  .section {
+    border-bottom: var(--border-width) solid var(--color-border);
+    padding: var(--space-20) var(--container-px);
+  }
+
+  .section--hero {
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+  }
+
+  @media (min-width: 40rem) {
+    .section--hero {
+      padding-top: var(--space-32);
+      padding-bottom: var(--space-32);
+    }
+  }
+
+  .section--footer {
+    background: var(--color-bg-footer);
+    padding: var(--space-12) var(--container-px);
+    text-align: center;
+  }
+
+  /* Hero
+  ─────────────────────────────────────────────── */
+  .hero__eyebrow {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero__title {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-6);
+    line-height: var(--leading-tight);
+  }
+
+  @media (min-width: 40rem) {
+    .hero__title {
+      font-size: var(--font-size-6xl);
+    }
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-8);
+    line-height: var(--leading-normal);
+  }
+
+  .hero__cta {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  /* Buttons
+  ─────────────────────────────────────────────── */
+  .btn {
+    display: inline-block;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-base);
+    text-decoration: none;
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast);
+    cursor: pointer;
+  }
+
+  .btn--primary {
+    background: var(--color-accent);
+    color: var(--color-red-950);
+    border: var(--border-width) solid transparent;
+  }
+
+  .btn--primary:hover {
+    background: var(--color-accent-hover);
+  }
+
+  .btn--outline {
+    background: transparent;
+    color: var(--color-accent);
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .btn--outline:hover {
+    background: var(--color-bg-tag);
+  }
+
+  /* Section headings
+  ─────────────────────────────────────────────── */
+  .section-title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-12);
+  }
+
+  /* Projects
+  ─────────────────────────────────────────────── */
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .project {
+    border-left: var(--border-accent-width) solid var(--color-accent-vertical);
+    padding-left: var(--space-6);
+  }
+
+  .project__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-2);
+  }
+
+  .project__desc {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .project__tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    background: var(--color-bg-tag);
+    color: var(--color-text-muted);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Services
+  ─────────────────────────────────────────────── */
+  .services {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 48rem) {
+    .services {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .service__card {
+    background: var(--color-red-700);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .service__card:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .service__title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-3);
+  }
+
+  .service__desc {
+    color: var(--color-text-muted);
+  }
+
+  /* Hire section
+  ─────────────────────────────────────────────── */
+  .hire__body {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-8);
+    line-height: var(--leading-normal);
+  }
+
+  /* Footer
+  ─────────────────────────────────────────────── */
+  .footer__tagline {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  .footer__links {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+
+  .footer__links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .footer__links a:hover {
+    color: var(--color-accent);
+  }
+
+  .footer__copy {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+}
